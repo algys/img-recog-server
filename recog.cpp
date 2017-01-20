@@ -8,20 +8,19 @@ double dist(const Point2f &p1, const Point2f &p2){
 }
 
 bool isValid(const vector<Point2f> &corners){
-    double eps = 0.3;
+    double eps = 0.60;
     double p1, p2;
 
     p1 = fabs(1 - dist(corners[0],corners[1])/dist(corners[2],corners[3]));
     p2 = fabs(1 - dist(corners[1],corners[2])/dist(corners[3],corners[0]));
 
-    if(p1<eps && p2<eps && dist(corners[0], corners[1])>50)
+    if(p1<eps && p2<eps && dist(corners[0], corners[1])>20)
         return true;
     return false;
 }
 
 int Recog::tryrecog(){
     int minHessian = 400;
-    Mat img_scene = frame.get_img();
 
     vector<KeyPoint> keypoints_scene = frame.get_keypoints();
 
@@ -59,7 +58,7 @@ int Recog::tryrecog(){
 
         matcher.match(descriptors_temple, descriptors_scene, matches);
 
-        double max_dist = 0; double min_dist = 100;
+        double max_dist = 0; double min_dist = 1000;
         for( int i = 0; i < matches.size(); i++ ){
             double dist = matches[i].distance;
             if( dist < min_dist ) min_dist = dist;
@@ -91,7 +90,7 @@ int Recog::tryrecog(){
 //		cout<<good_matches.size()<<endl;
 //		cout<<(double)good_matches.size()/(double)keypoints_temple.size()<<endl;
 
-        if(good_matches.size()>=100){
+        if(good_matches.size()>=30){
 
             Mat H = findHomography( temple, scene, CV_RANSAC );
             std::vector<Point2f> temple_corners(4);

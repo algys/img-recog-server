@@ -1,18 +1,66 @@
 #include "catalog.h"
+#include <fstream>
+
+Data read(std::ifstream &in){
+
+    char buf[1024];
+
+    in.getline(buf, 256);
+    std::string author(buf,strlen(buf));
+    in.getline(buf, 256);
+    std::string name(buf,strlen(buf));
+    in.getline(buf, 256);
+    std::string year(buf,strlen(buf));
+    in.getline(buf, 1024);
+    std::string info(buf,strlen(buf));
+    in.getline(buf, 256);
+    std::string path(buf,strlen(buf));
+    in.getline(buf, 256);
+    std::string url(buf,strlen(buf));
+
+    return Data(author, name, year, info, path, url);
+}
 
 Catalog::Catalog()
 {
-    Mat testImg1 = imread("/home/algys/tp/c_cpp/project/testImg/1.jpeg", 0);
-    Mat testImg2 = imread("/home/algys/tp/c_cpp/project/testImg/2.jpeg",0);
-    Mat testImg3 = imread("/home/algys/tp/c_cpp/project/testImg/3.png",0);
+    std::ifstream in("/home/algys/tp/c_cpp/server/project-serv/cat.txt");
+
+    assert(in.is_open());
+
+    Data testData1 = read(in);
+    Data testData2 = read(in);
+    Data testData3 = read(in);
+    Data testData4 = read(in);
+    Data testData5 = read(in);
+    Data testData6 = read(in);
+    Data testData7 = read(in);
+    Data testData8 = read(in);
+
+    Mat testImg1 = imread(testData1.path, 0);
+    imwrite("/home/algys/test1.jpg", testImg1);
+    Mat testImg2 = imread(testData2.path, 0);
+    imwrite("/home/algys/test2.jpg", testImg2);
+    Mat testImg3 = imread(testData3.path, 0);
+    imwrite("/home/algys/test3.jpg", testImg3);
+    Mat testImg4 = imread(testData4.path, 0);
+    imwrite("/home/algys/test4.jpg", testImg4);
+    Mat testImg5 = imread(testData5.path, 0);
+    imwrite("/home/algys/test5.jpg", testImg5);
+    Mat testImg6 = imread(testData6.path, 0);
+    imwrite("/home/algys/test6.jpg", testImg6);
+    Mat testImg7 = imread(testData7.path, 0);
+    imwrite("/home/algys/test7.jpg", testImg7);
+    Mat testImg8 = imread(testData8.path, 0);
+    imwrite("/home/algys/test8.jpg", testImg8);
 
     Capture testCapture1(testImg1);
     Capture testCapture2(testImg2);
     Capture testCapture3(testImg3);
-
-    Data testData1("AlpenGold", "Kraft Foods", "1994 год", "Альпен Гольд (англ. Alpen Gold) — бренд кондитерских изделий, ранее принадлежавший компании Kraft Foods, а теперь Mondelēz International. Под данной торговой маркой представлены такие кондитерские изделия, как шоколад, мороженое, печенье, конфеты. Продукция компании представлена только в некоторых странах СНГ (России, Украине, Казахстане и Белоруссии) и в Польше. Название торговой марки переводится как — Альпийское золото, однако продукция не имеет никакого отношения к Альпам. Все заводы расположены лишь на территории стран восточной Европы.","/home/algys/tp/c_cpp/project/testImg/1.jpeg");
-    Data testData2("Monolisa", "Леонардо да Винчи", "1503—1519", "«Мо́на Ли́за», она же «Джоко́нда»; (итал. Mona Lisa, La Gioconda, фр. La Joconde), полное название — Портре́т госпожи́ Ли́зы дель Джоко́ндо, итал. Ritratto di Monna Lisa del Giocondo) — картина Леонардо да Винчи, находящаяся в Лувре (Париж, Франция), одно из самых известных произведений живописи в мире[1][2], которое, как считается, является портретом Лизы Герардини, супруги торговца шёлком из Флоренции Франческо дель Джокондо","/home/algys/tp/c_cpp/project/testImg/2.jpeg");
-    Data testData3("Test","test","test","test","/home/algys/tp/c_cpp/project/testImg/3.png");
+    Capture testCapture4(testImg4);
+    Capture testCapture5(testImg5);
+    Capture testCapture6(testImg6);
+    Capture testCapture7(testImg7);
+    Capture testCapture8(testImg8);
 
     captures = new std::map< int, Capture >;
     data = new std::map< int, Data>;
@@ -20,10 +68,20 @@ Catalog::Catalog()
     data->operator [](0) = testData1;
     data->operator [](1) = testData2;
     data->operator [](2) = testData3;
+    data->operator [](3) = testData4;
+    data->operator [](4) = testData5;
+    data->operator [](5) = testData6;
+    data->operator [](6) = testData7;
+    data->operator [](7) = testData8;
 
     captures->operator [](0) = testCapture1;
     captures->operator [](1) = testCapture2;
     captures->operator [](2) = testCapture3;
+    captures->operator [](3) = testCapture4;
+    captures->operator [](4) = testCapture5;
+    captures->operator [](5) = testCapture6;
+    captures->operator [](6) = testCapture7;
+    captures->operator [](7) = testCapture8;
 }
 
 bool Catalog::isOpened(){
